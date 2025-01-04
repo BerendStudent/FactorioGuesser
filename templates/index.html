@@ -3,6 +3,20 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}?v=1">
 </head>
 <body>
-    <img src="{{url_for('static', filename='images/Belt.png')}}" alt="Can you guess what's being produced here?">
-    <div class="test"><p>Hello!</p></div>
+    <main>
+        <img id='guess' alt="Can you guess what's being produced here?">
+        <div class="test"><p>Hello!</p></div>
+        <button id="renewImage" onclick = "chooseRandomImage()">New Image</button> 
+    </main>
+    <script>
+        function chooseRandomImage(){
+            var possibleImages = ['Belt', 'Gears']
+            // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
+            Random = Math.floor(Math.random() * possibleImages.length);
+            var randomImage = possibleImages[Random];
+            document.getElementById("guess").src=`static/images/${randomImage}.png`;
+            console.log(serverCall);
+        }
+        document.onload = chooseRandomImage();
+    </script>
 </body>
