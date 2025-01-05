@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}?v=1">
+    <nav class="navbar">
+        <div class="navbar-title">FactorioGuessr</div>
+        <ul>
+            <li><a href="guessr">FactorioGuessr</a></li>
+            <li><a href="about">About</a></li>
+        </ul>
+    </nav>
+</head>
+<body>
+    <main>
+        <h1>About Factorioguessr</h1>
+        <p>A fun little game, where you guess what's being made!</p>
+        <h2>Usage:</h2>
+        <p>Look at the image provided, and guess the correct recipe!</p>
+        <p>Use things like the ingredients, the layout, and the volume, to guess what's being made!</p>
+        <h2>Possible guesses:</h2>
+        <table>
+            <tbody id="Table">
+                <!-- LEAVE EMPTY!!!!! FILLED BY SCRIPT-->
+            </tbody>
+        </table>
+        <h3>Functionality</h3>
+        <p>Made with Flask, HTML, Javascript, and CSS.</p>
+    </main>
+    <script>
+        function loadChoices() {
+            const url = "/possibleguesses";
+            axios.get(url)
+                .then(function(response) {
+                    if(response.data.length === 0) {
+                        console.log("No guess files found");
+                        var tableBody = document.getElementById('Table');
+                        tableBody.innerHTML = '';
+                    } else {
+                        console.log(response.data)
+                        var tableBody = document.getElementById('Table');
+                        for (var i = 0; i < response.data.length - 1; i++) {
+                            var row = document.createElement('tr');
+                                row.innerHTML = `
+                                <td>${response.data[i]}</td>
+                                `;
+                            tableBody.appendChild(row);
+                        }
+                    }
+                })
+                .catch(function(error) {
+                    console.log("Error:", error);
+                });
+        }
+        document.onload = loadChoices();
+    </script>
+</body>

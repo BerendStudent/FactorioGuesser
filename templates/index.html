@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}?v=1">
+    <nav class="navbar">
+        <div class="navbar-title">FactorioGuessr</div>
+        <ul>
+            <li><a href="guessr">FactorioGuessr</a></li>
+            <li><a href="about">About</a></li>
+        </ul>
+    </nav>
 </head>
 <body>
     <main>
         <p>Current score: <span id="score"></span></p>
         <br>
-        <img id='guess' alt="Can you guess what's being produced here?">
+        <img id='guess' alt="Can you guess what's being produced here?" width=auto height="500">
         <br>
         <input type="text" placeholder="Enter guess...." id="guessBar">
+        <button id="submitButton" onclick = "submitGuess()">Submit</button>
+        <button id="renewImage" onclick = "chooseRandomImage()">New Image</button> 
         <br>
         <p><span id="message"></span></p>
-        <br>
-        <button id="submitButton" onclick = "submitGuess()">Submit</button>
-        <br>
-        <button id="renewImage" onclick = "chooseRandomImage()">New Image</button> 
     </main>
     <script>
         var score = 0;
@@ -37,13 +43,29 @@
             document.getElementById("guessBar").value = '';
             resetGame();
         }
-        function chooseRandomImage(){
-            var possibleImages = ['Belt', 'Gears', 'Green Circuits', 'Inserters', 'Iron Plates', 'Advanced Oil Processing', 'Copper Plates']
+        async function chooseRandomImage(){
+            var possibleImages = await loadChoices();
+            console.log(possibleImages)
             // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
             Random = Math.floor(Math.random() * possibleImages.length);
             var randomImage = possibleImages[Random];
             document.getElementById("guess").src=`static/images/${randomImage}.png`;
             return randomImage;
+        }
+
+        async function loadChoices() {
+            var possibleImages = [];
+            const url = "/possibleguesses";
+            const response = await axios.get(url);
+            if(response.length === 0) {
+                console.log("No guess files found");
+            } else {
+                for (var i = 0; i < response.data.length - 1; i++) {
+                    	possibleImages[i] = response.data[i];
+                }
+                console.log(possibleImages);
+                return possibleImages;
+            }
         }
         document.onload = resetGame();
     </script>
