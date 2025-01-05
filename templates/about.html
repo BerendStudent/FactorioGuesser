@@ -38,7 +38,7 @@
                     } else {
                         console.log(response.data)
                         var tableBody = document.getElementById('Table');
-                        for (var i = 0; i < response.data.length - 1; i++) {
+                        for (var i = 0; i < response.data.length; i++) {
                             var row = document.createElement('tr');
                                 row.innerHTML = `
                                 <td>${response.data[i]}</td>
