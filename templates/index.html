@@ -4,19 +4,47 @@
 </head>
 <body>
     <main>
+        <p>Current score: <span id="score"></span></p>
+        <br>
         <img id='guess' alt="Can you guess what's being produced here?">
-        <div class="test"><p>Hello!</p></div>
+        <br>
+        <input type="text" placeholder="Enter guess...." id="guessBar">
+        <br>
+        <p><span id="message"></span></p>
+        <br>
+        <button id="submitButton" onclick = "submitGuess()">Submit</button>
+        <br>
         <button id="renewImage" onclick = "chooseRandomImage()">New Image</button> 
     </main>
     <script>
+        var score = 0;
+        var correct;
+        function resetGame(){
+            document.getElementById('score').innerHTML = score;
+            correct = chooseRandomImage();
+        }
+        function submitGuess(){
+            var submitted = document.getElementById("guessBar").value;
+            if(submitted == ''){
+                document.getElementById('message').innerHTML = 'Please enter a guess.';
+            } else{
+                if(submitted == correct){
+                    score += 1;
+                } else {
+                    score = 0;
+                }
+            }
+            document.getElementById("guessBar").value = '';
+            resetGame();
+        }
         function chooseRandomImage(){
-            var possibleImages = ['Belt', 'Gears']
+            var possibleImages = ['Belt', 'Gears', 'Green Circuits', 'Inserters', 'Iron Plates', 'Advanced Oil Processing', 'Copper Plates']
             // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
             Random = Math.floor(Math.random() * possibleImages.length);
             var randomImage = possibleImages[Random];
             document.getElementById("guess").src=`static/images/${randomImage}.png`;
-            console.log(serverCall);
+            return randomImage;
         }
-        document.onload = chooseRandomImage();
+        document.onload = resetGame();
     </script>
 </body>
