@@ -25,9 +25,9 @@
     <script>
         var score = 0;
         var correct;
-        function resetGame(){
+        async function resetGame(){
             document.getElementById('score').innerHTML = score;
-            correct = chooseRandomImage();
+            correct = await chooseRandomImage();
         }
         function submitGuess(){
             var submitted = document.getElementById("guessBar").value;
@@ -48,6 +48,7 @@
             // https://stackoverflow.com/questions/4550505/getting-a-random-value-from-a-javascript-array
             Random = Math.floor(Math.random() * possibleImages.length);
             var randomImage = possibleImages[Random];
+            console.log(randomImage);
             document.getElementById("guess").src=`static/images/${randomImage}.png`;
             return randomImage;
         }
@@ -55,6 +56,7 @@
         async function loadChoices() {
             const url = "/possibleguesses";
             const response = await axios.get(url);
+            var possibleImages = [];
             if(response.length === 0) {
                 console.log("No guess files found");
             } else {
